@@ -26,6 +26,8 @@ class Peca:
     def desce(self, Tela):
         for i in range(self.tamanho):
             for j in range(self.tamanho):
+                if self.grade[i][j] * (self.y + 1 + i) >= qtdQuadradosAltura:
+                    return 0
                 if Tela.grade[self.y+1][self.x] * self.grade[i][j] != 0:
                     return 0
         self.y = self.y + 1
@@ -64,23 +66,23 @@ class Tetris:
     def desenha(self):
         for i in range(self.peca.tamanho):
             for j in range(self.peca.tamanho):
-                if self.peca.grade[i][j] != 0:
+                if self.peca.grade[j][i] != 0:
                     self.canvas.create_polygon(
-                        [self.peca.x * quadradoLado,
-                         self.peca.y * quadradoLado,
-                         self.peca.x * quadradoLado + quadradoLado,
-                         self.peca.y * quadradoLado,
-                         self.peca.x * quadradoLado + quadradoLado,
-                         self.peca.y * quadradoLado + quadradoLado,
-                         self.peca.x * quadradoLado,
-                         self.peca.y*quadradoLado+quadradoLado], fill='green')
+                        [(self.peca.x + j)* quadradoLado,
+                         (self.peca.y + i) * quadradoLado,
+                         (self.peca.x + j) * quadradoLado + quadradoLado,
+                          (self.peca.y + i) * quadradoLado,
+                         (self.peca.x + j) * quadradoLado + quadradoLado,
+                          (self.peca.y + i) * quadradoLado + quadradoLado,
+                         (self.peca.x + j) * quadradoLado,
+                          (self.peca.y + i)*quadradoLado+quadradoLado], fill='green')
 
     def run(self):
         while(True):
             self.canvas.delete('all')
             self.desenha()
             self.peca.desce(self.tempo)
-            self.canvas.after(1180)
+            self.canvas.after(150)
             self.window.update_idletasks()
             self.window.update()
 
