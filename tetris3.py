@@ -77,6 +77,7 @@ class Tetris:
 
     def run(self):
         while(True):
+            self.canvas.delete('all')
             self.desenha()
             self.peca.desce(self.tempo)
             self.canvas.after(1180)
