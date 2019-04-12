@@ -16,7 +16,7 @@ class Peca:
         # self.grade[][]
         # self.tamanho
         if(tipo == 1):
-            self.grade = [[0, 1, 0], [0, 1, 1], [0, 0, 1]]
+            self.grade = [[0, 0, 0], [1, 1, 0], [0, 1, 1]]
             self.tamanho = 3
 
 #    def vira(self):
@@ -28,7 +28,7 @@ class Peca:
             for j in range(self.tamanho):
                 if self.grade[i][j] * (self.y+1+i) >= qtdQuadradosAltura:
                     return 0
-                if Tela.grade[self.y+1][self.x] * self.grade[i][j] != 0:
+                if self.grade[i][j]==1 and Tela.grade[self.y+i+1][self.x+j] * self.grade[i][j] != 0:
                     return 0
         self.y = self.y + 1
         return 1
@@ -61,6 +61,12 @@ class Tela:
         self.grade = [[0 for i in range(qtdQuadradosLargura)]
                       for j in range(qtdQuadradosAltura)]
 
+    def addPecas(self, peca):
+        for lin in range(peca.tamanho):
+            for col in range(peca.tamanho):
+                if peca.grade[lin][col] != 0:
+                    self.grade[lin+peca.y][col+peca.x] = peca.grade[lin][col]
+
 
 class Tetris:
 
@@ -71,7 +77,7 @@ class Tetris:
         self.canvas.pack()
         self.peca = Peca(3, 1, 1)
         self.numPeca = 0
-        self.tempo = Tela()
+        self.tela = Tela()
 
         self.window.bind("<Right>", self.moverParaDireita)
         self.window.bind("<Left>", self.moverParaEsquerda)
@@ -80,15 +86,15 @@ class Tetris:
    # def gira(self, event):
 
     def moverParaEsquerda(self, event):
-        self.peca.esquerda(self.tempo)
+        self.peca.esquerda(self.tela)
 
     def moverParaDireita(self, event):
-        self.peca.direita(self.tempo)
+        self.peca.direita(self.tela)
 
     def desenha(self):
         for i in range(self.peca.tamanho):
             for j in range(self.peca.tamanho):
-                if self.peca.grade[j][i] != 0:
+                if self.peca.grade[i][j] != 0:
                     self.canvas.create_polygon(
                         [(self.peca.x + j)* quadradoLado,
                          (self.peca.y + i) * quadradoLado,
@@ -99,14 +105,32 @@ class Tetris:
                          (self.peca.x + j) * quadradoLado,
                           (self.peca.y + i)*quadradoLado+quadradoLado], fill='green')
 
+
+        for lin in range(qtdQuadradosAltura):
+            for col in range(qtdQuadradosLargura):
+                if self.tela.grade[lin][col] != 0:
+                    self.canvas.create_polygon(
+                        [col*quadradoLado,
+                        lin * quadradoLado,
+                        col*quadradoLado+quadradoLado,
+                        lin*quadradoLado,
+                        col*quadradoLado+quadradoLado,
+                        lin*quadradoLado+quadradoLado,
+                        col*quadradoLado,
+                        lin*quadradoLado+quadradoLado], fill="red")
+
     def run(self):
         time = 0
         while(True):
             self.canvas.delete('all')
 
             if time == 5: 
-                self.peca.desce(self.tempo)
+                desceu = self.peca.desce(self.tela)
                 time = 0
+                if desceu == 0:
+                    self.tela.addPecas(self.peca)
+                    self.peca = Peca (3 , 1, 1)
+
             else:
                 time += 1
 
