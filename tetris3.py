@@ -2,8 +2,8 @@ from tkinter import *
 
 # Dimensões do jogo
 quadradoLado = 20
-qtdQuadradosAltura = 20
 qtdQuadradosLargura = 10
+qtdQuadradosAltura = 20
 largura = quadradoLado * qtdQuadradosLargura
 altura = quadradoLado * qtdQuadradosAltura
 
@@ -26,7 +26,7 @@ class Peca:
     def desce(self, Tela):
         for i in range(self.tamanho):
             for j in range(self.tamanho):
-                if self.grade[i][j] * (self.y + 1 + i) >= qtdQuadradosAltura:
+                if self.grade[i][j] * (self.y+1+i) >= qtdQuadradosAltura:
                     return 0
                 if Tela.grade[self.y+1][self.x] * self.grade[i][j] != 0:
                     return 0
@@ -42,8 +42,8 @@ class Tela:
 
     def __init__(self):
         # Define uma matriz e itera por ela usando [[], []]
-        self.grade = [[0 for i in range(qtdQuadradosAltura)]
-                      for j in range(qtdQuadradosLargura)]
+        self.grade = [[0 for i in range(qtdQuadradosLargura)]
+                      for j in range(qtdQuadradosAltura)]
 
 
 class Tetris:
@@ -51,7 +51,7 @@ class Tetris:
     def __init__(self):
         self.window = Tk()
         self.canvas = Canvas(self.window, width=largura,
-                             height=largura, bg='black')
+                             height=altura, bg='black')
         self.canvas.pack()
         self.peca = Peca(3, 1, 1)
         self.numPeca = 0
