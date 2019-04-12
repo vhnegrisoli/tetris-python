@@ -33,9 +33,25 @@ class Peca:
         self.y = self.y + 1
         return 1
 
-#    def direita(self):
+    def direita(self, Tela):
+        for i in range(self.tamanho):
+            for j in range(self.tamanho):
+                if self.grade[i][j] * (self.x+1+i) >= qtdQuadradosLargura:
+                    return 0
+                if Tela.grade[self.y][self.x+1] * self.grade[i][j] != 0:
+                    return 0
+        self.x = self.x + 1
+        return 1
 
-#    def esquerda(self):
+    def esquerda(self, Tela):
+        for i in range(self.tamanho):
+            for j in range(self.tamanho):
+                if self.grade[i][j] * (self.x-1+i) < 0:
+                    return 0
+                if Tela.grade[self.y][self.x+1] * self.grade[i][j] != 0:
+                    return 0
+        self.x = self.x - 1
+        return 1
 
 
 class Tela:
@@ -57,11 +73,17 @@ class Tetris:
         self.numPeca = 0
         self.tempo = Tela()
 
+        self.window.bind("<Right>", self.moverParaDireita)
+        self.window.bind("<Left>", self.moverParaEsquerda)
+
+
    # def gira(self, event):
 
-   # def moverParaEsquerda(self, event):
+    def moverParaEsquerda(self, event):
+        self.peca.esquerda(self.tempo)
 
-#    def moverParaDireita(self, event):
+    def moverParaDireita(self, event):
+        self.peca.direita(self.tempo)
 
     def desenha(self):
         for i in range(self.peca.tamanho):
@@ -78,11 +100,19 @@ class Tetris:
                           (self.peca.y + i)*quadradoLado+quadradoLado], fill='green')
 
     def run(self):
+        time = 0
         while(True):
             self.canvas.delete('all')
+
+            if time == 5: 
+                self.peca.desce(self.tempo)
+                time = 0
+            else:
+                time += 1
+
             self.desenha()
-            self.peca.desce(self.tempo)
-            self.canvas.after(150)
+            
+            self.canvas.after(50)
             self.window.update_idletasks()
             self.window.update()
 
