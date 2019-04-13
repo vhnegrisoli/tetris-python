@@ -21,7 +21,30 @@ class Peca:
             self.grade = [[0, 0, 0], [1, 1, 0], [0, 1, 1]]
             self.tamanho = 3
 
-#    def vira(self):
+    # Método responsável por girar uma peça no jogo
+    def vira(self, Tela):
+        # Cria um array de cópia para armazenar a peça a ser giradea
+        copia = [[0 for indiceLinha in range(
+            self.tamanho)] for indiceColuna in range(self.tamanho)]
+
+        # Faz a cópia girar a peça
+        for lin in range(self.tamanho):
+            for col in range(self.tamanho):
+                copia[self.tamanho - 1 - col][lin] = self.grade[lin][col]
+
+        # Verifica colisão do array de cópia com algo da tela
+        for indiceLinha in range(self.tamanho):
+            for indiceColuna in range(self.tamanho):
+                if copia[indiceLinha][indiceColuna] * (self.coluna+indiceLinha) >= qtdQuadradosAltura:
+                    return 0
+                if copia[indiceLinha][indiceColuna] == 1 and Tela.grade[self.coluna+indiceLinha][self.linha+indiceColuna] != 0:
+                    return 0
+        # Copia os valores do array cópia para a grade
+        for lin in range(self.tamanho):
+            for col in range(self.tamanho):
+                self.grade[lin][col] = copia[lin][col]
+        return 1
+
     def desce(self, Tela):
         for indiceLinha in range(self.tamanho):
             for indiceColuna in range(self.tamanho):
@@ -89,8 +112,10 @@ class Tetris:
 
         self.window.bind("<Right>", self.moverParaDireita)
         self.window.bind("<Left>", self.moverParaEsquerda)
+        self.window.bind("<Up>", self.gira)
 
-   # def gira(self, event):
+    def gira(self, event):
+        self.peca.vira(self.tela)
 
     def moverParaEsquerda(self, event):
         self.peca.esquerda(self.tela)
