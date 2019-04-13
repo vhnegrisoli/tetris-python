@@ -9,6 +9,9 @@ qtdQuadradosAltura = 20
 largura = quadradoLado * qtdQuadradosLargura
 altura = quadradoLado * qtdQuadradosAltura
 
+# Este método global é responsável por gerar números aleatórios de 1 a 7.
+# Os números de 1 a 7 são respectivos às diferentes 7 tipos de peças geradas
+# pelo jogo.
 def geraPecaAleatoria():
     return random.randint(1, 7)
 
@@ -18,26 +21,39 @@ class Peca:
     def __init__(self, linha, coluna, tipo):
         self.linha = linha
         self.coluna = coluna
-        # self.grade[][]
-        # self.tamanho
+
+        # O tipo define como será a peça, sendo:
+        # Esta é a cobra em formato de cobra
         if(tipo == 1):
             self.grade = [[0, 0, 0], [1, 1, 0], [0, 1, 1]]
             self.tamanho = 3
+
+        # Esta é a peça em formato de cobra inversa    
         elif(tipo == 2):
             self.grade = [[0, 0, 0], [0, 1, 1], [1, 1,0]]
             self.tamanho = 3
+
+        # Esta é a peça em formato de quadrado
         elif(tipo == 3):
             self.grade = [[0, 0, 0], [0, 1, 1], [0, 1,1]]
             self.tamanho = 3
+        
+        # Esta é a peça em formato de L
         elif(tipo == 4):
             self.grade = [[0, 0, 0], [0, 0, 1], [1, 1,1]]
             self.tamanho = 3
+        
+        # Esta é a peça em formato de L invertido    
         elif(tipo == 5):
             self.grade = [[0, 0, 0], [1, 0, 0], [1, 1,1]]
             self.tamanho = 3
+
+        # Esta é a peça em formato de T    
         elif(tipo == 6):
             self.grade = [[0, 0, 0], [0,1, 0], [1, 1,1]]
             self.tamanho = 3
+        
+        #Esta é a peça em formato de barra, em uma matriz 4x4    
         elif(tipo == 7):
             self.grade = [[0,1,0,0], [0, 1,0, 0], [0,1, 0,0], [0,1,0,0]]
             self.tamanho = 4
@@ -100,8 +116,6 @@ class Peca:
         return 1
 
 # A classe tela é responsável por criar a grade da tela, que será renederizada pelo canvas na classe Tetris
-
-
 class Tela:
 
     def __init__(self):
@@ -119,8 +133,6 @@ class Tela:
 
 # A classe Tetris é a classe inicializadora do jogo, nesta classe define-se o canvas para renderizar
 # a grade da tela e define o método run().
-
-
 class Tetris:
 
     def __init__(self):
