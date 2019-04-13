@@ -10,9 +10,9 @@ altura = quadradoLado * qtdQuadradosAltura
 
 class Peca:
 
-    def __init__(self, x, y, tipo):
-        self.x = x
-        self.y = y
+    def __init__(self, linha, coluna, tipo):
+        self.linha = linha
+        self.coluna = coluna
         # self.grade[][]
         # self.tamanho
         if(tipo == 1):
@@ -21,36 +21,36 @@ class Peca:
 
 #    def vira(self):
 
-# y é uma linha
-# x é coluna
+# coluna é uma linha
+# linha é coluna
     def desce(self, Tela):
-        for i in range(self.tamanho):
-            for j in range(self.tamanho):
-                if self.grade[i][j] * (self.y+1+i) >= qtdQuadradosAltura:
+        for indiceLinha in range(self.tamanho):
+            for indiceColuna in range(self.tamanho):
+                if self.grade[indiceLinha][indiceColuna] * (self.coluna+1+indiceLinha) >= qtdQuadradosAltura:
                     return 0
-                if self.grade[i][j]==1 and Tela.grade[self.y+i+1][self.x+j] * self.grade[i][j] != 0:
+                if self.grade[indiceLinha][indiceColuna] == 1 and Tela.grade[self.coluna+indiceLinha+1][self.linha+indiceColuna] * self.grade[indiceLinha][indiceColuna] != 0:
                     return 0
-        self.y = self.y + 1
+        self.coluna = self.coluna + 1
         return 1
 
     def direita(self, Tela):
-        for i in range(self.tamanho):
-            for j in range(self.tamanho):
-                if self.grade[i][j] * (self.x+1+i) >= qtdQuadradosLargura:
+        for indiceLinha in range(self.tamanho):
+            for indiceColuna in range(self.tamanho):
+                if self.grade[indiceLinha][indiceColuna] * (self.linha+1+indiceLinha) >= qtdQuadradosLargura:
                     return 0
-                if Tela.grade[self.y][self.x+1] * self.grade[i][j] != 0:
+                if Tela.grade[self.coluna][self.linha+1] * self.grade[indiceLinha][indiceColuna] != 0:
                     return 0
-        self.x = self.x + 1
+        self.linha = self.linha + 1
         return 1
 
     def esquerda(self, Tela):
-        for i in range(self.tamanho):
-            for j in range(self.tamanho):
-                if self.grade[i][j] * (self.x-1+i) < 0:
+        for indiceLinha in range(self.tamanho):
+            for indiceColuna in range(self.tamanho):
+                if self.grade[indiceLinha][indiceColuna] * (self.linha-1+indiceLinha) < 0:
                     return 0
-                if Tela.grade[self.y][self.x+1] * self.grade[i][j] != 0:
+                if Tela.grade[self.coluna][self.linha+1] * self.grade[indiceLinha][indiceColuna] != 0:
                     return 0
-        self.x = self.x - 1
+        self.linha = self.linha - 1
         return 1
 
 
@@ -58,14 +58,15 @@ class Tela:
 
     def __init__(self):
         # Define uma matriz e itera por ela usando [[], []]
-        self.grade = [[0 for i in range(qtdQuadradosLargura)]
-                      for j in range(qtdQuadradosAltura)]
+        self.grade = [[0 for indiceLinha in range(qtdQuadradosLargura)]
+                      for indiceColuna in range(qtdQuadradosAltura)]
 
     def addPecas(self, peca):
         for lin in range(peca.tamanho):
             for col in range(peca.tamanho):
                 if peca.grade[lin][col] != 0:
-                    self.grade[lin+peca.y][col+peca.x] = peca.grade[lin][col]
+                    self.grade[lin+peca.coluna][col +
+                                                peca.linha] = peca.grade[lin][col]
 
 
 class Tetris:
@@ -82,7 +83,6 @@ class Tetris:
         self.window.bind("<Right>", self.moverParaDireita)
         self.window.bind("<Left>", self.moverParaEsquerda)
 
-
    # def gira(self, event):
 
     def moverParaEsquerda(self, event):
@@ -92,50 +92,52 @@ class Tetris:
         self.peca.direita(self.tela)
 
     def desenha(self):
-        for i in range(self.peca.tamanho):
-            for j in range(self.peca.tamanho):
-                if self.peca.grade[i][j] != 0:
+        for indiceLinha in range(self.peca.tamanho):
+            for indiceColuna in range(self.peca.tamanho):
+                if self.peca.grade[indiceLinha][indiceColuna] != 0:
                     self.canvas.create_polygon(
-                        [(self.peca.x + j)* quadradoLado,
-                         (self.peca.y + i) * quadradoLado,
-                         (self.peca.x + j) * quadradoLado + quadradoLado,
-                          (self.peca.y + i) * quadradoLado,
-                         (self.peca.x + j) * quadradoLado + quadradoLado,
-                          (self.peca.y + i) * quadradoLado + quadradoLado,
-                         (self.peca.x + j) * quadradoLado,
-                          (self.peca.y + i)*quadradoLado+quadradoLado], fill='green')
-
+                        [(self.peca.linha + indiceColuna) * quadradoLado,
+                         (self.peca.coluna + indiceLinha) * quadradoLado,
+                         (self.peca.linha + indiceColuna) *
+                         quadradoLado + quadradoLado,
+                         (self.peca.coluna + indiceLinha) * quadradoLado,
+                         (self.peca.linha + indiceColuna) *
+                         quadradoLado + quadradoLado,
+                         (self.peca.coluna + indiceLinha) *
+                         quadradoLado + quadradoLado,
+                         (self.peca.linha + indiceColuna) * quadradoLado,
+                         (self.peca.coluna + indiceLinha)*quadradoLado+quadradoLado], fill='green')
 
         for lin in range(qtdQuadradosAltura):
             for col in range(qtdQuadradosLargura):
                 if self.tela.grade[lin][col] != 0:
                     self.canvas.create_polygon(
                         [col*quadradoLado,
-                        lin * quadradoLado,
-                        col*quadradoLado+quadradoLado,
-                        lin*quadradoLado,
-                        col*quadradoLado+quadradoLado,
-                        lin*quadradoLado+quadradoLado,
-                        col*quadradoLado,
-                        lin*quadradoLado+quadradoLado], fill="red")
+                         lin * quadradoLado,
+                         col*quadradoLado+quadradoLado,
+                         lin*quadradoLado,
+                         col*quadradoLado+quadradoLado,
+                         lin*quadradoLado+quadradoLado,
+                         col*quadradoLado,
+                         lin*quadradoLado+quadradoLado], fill="red")
 
     def run(self):
         time = 0
         while(True):
             self.canvas.delete('all')
 
-            if time == 5: 
+            if time == 5:
                 desceu = self.peca.desce(self.tela)
                 time = 0
                 if desceu == 0:
                     self.tela.addPecas(self.peca)
-                    self.peca = Peca (3 , 1, 1)
+                    self.peca = Peca(3, 1, 1)
 
             else:
                 time += 1
 
             self.desenha()
-            
+
             self.canvas.after(50)
             self.window.update_idletasks()
             self.window.update()
