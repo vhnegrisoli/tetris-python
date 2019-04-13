@@ -1,4 +1,5 @@
 from tkinter import *
+import random
 
 # Dimensões do jogo
 quadradoLado = 20
@@ -8,6 +9,8 @@ qtdQuadradosAltura = 20
 largura = quadradoLado * qtdQuadradosLargura
 altura = quadradoLado * qtdQuadradosAltura
 
+def geraPecaAleatoria():
+    return random.randint(1, 7)
 
 # A classe Peca é responsável por criar e renderizar a peça no Tetris
 class Peca:
@@ -20,6 +23,25 @@ class Peca:
         if(tipo == 1):
             self.grade = [[0, 0, 0], [1, 1, 0], [0, 1, 1]]
             self.tamanho = 3
+        elif(tipo == 2):
+            self.grade = [[0, 0, 0], [0, 1, 1], [1, 1,0]]
+            self.tamanho = 3
+        elif(tipo == 3):
+            self.grade = [[0, 0, 0], [0, 1, 1], [0, 1,1]]
+            self.tamanho = 3
+        elif(tipo == 4):
+            self.grade = [[0, 0, 0], [0, 0, 1], [1, 1,1]]
+            self.tamanho = 3
+        elif(tipo == 5):
+            self.grade = [[0, 0, 0], [1, 0, 0], [1, 1,1]]
+            self.tamanho = 3
+        elif(tipo == 6):
+            self.grade = [[0, 0, 0], [0,1, 0], [1, 1,1]]
+            self.tamanho = 3
+        elif(tipo == 7):
+            self.grade = [[0,1,0,0], [0, 1,0, 0], [0,1, 0,0], [0,1,0,0]]
+            self.tamanho = 4
+                
 
     # Método responsável por girar uma peça no jogo
     def vira(self, Tela):
@@ -59,7 +81,7 @@ class Peca:
     def direita(self, Tela):
         for indiceLinha in range(self.tamanho):
             for indiceColuna in range(self.tamanho):
-                if self.grade[indiceLinha][indiceColuna] * (self.linha+1+indiceLinha) >= qtdQuadradosLargura:
+                if self.grade[indiceLinha][indiceColuna] * (self.linha+1+indiceColuna) > qtdQuadradosLargura-1:
                     return 0
                 if Tela.grade[self.coluna][self.linha+1] * self.grade[indiceLinha][indiceColuna] != 0:
                     return 0
@@ -107,7 +129,7 @@ class Tetris:
                              height=altura, bg='black')
 
         self.canvas.pack()
-        self.peca = Peca(3, 1, 1)
+        self.peca = Peca(3, 1, geraPecaAleatoria())
         self.numPeca = 0
         self.tela = Tela()
 
@@ -166,7 +188,7 @@ class Tetris:
                 tempoDescida = 0
                 if desceu == 0:
                     self.tela.addPecas(self.peca)
-                    self.peca = Peca(3, 1, 1)
+                    self.peca = Peca(3, 1, geraPecaAleatoria())
 
             else:
                 tempoDescida += 1
