@@ -4,10 +4,12 @@ from tkinter import *
 quadradoLado = 20
 qtdQuadradosLargura = 10
 qtdQuadradosAltura = 20
+# Define a altura e a largura da tela
 largura = quadradoLado * qtdQuadradosLargura
 altura = quadradoLado * qtdQuadradosAltura
 
 
+# A classe Peca é responsável por criar e renderizar a peça no Tetris
 class Peca:
 
     def __init__(self, linha, coluna, tipo):
@@ -20,9 +22,6 @@ class Peca:
             self.tamanho = 3
 
 #    def vira(self):
-
-# coluna é uma linha
-# linha é coluna
     def desce(self, Tela):
         for indiceLinha in range(self.tamanho):
             for indiceColuna in range(self.tamanho):
@@ -33,6 +32,7 @@ class Peca:
         self.coluna = self.coluna + 1
         return 1
 
+    # Método que permite a movimentação à direita na grade da tela
     def direita(self, Tela):
         for indiceLinha in range(self.tamanho):
             for indiceColuna in range(self.tamanho):
@@ -43,6 +43,7 @@ class Peca:
         self.linha = self.linha + 1
         return 1
 
+    # Método que permite a movimentação à esquerda na grade da tela
     def esquerda(self, Tela):
         for indiceLinha in range(self.tamanho):
             for indiceColuna in range(self.tamanho):
@@ -53,6 +54,8 @@ class Peca:
         self.linha = self.linha - 1
         return 1
 
+# A classe tela é responsável por criar a grade da tela, que será renederizada pelo canvas na classe Tetris
+
 
 class Tela:
 
@@ -61,12 +64,16 @@ class Tela:
         self.grade = [[0 for indiceLinha in range(qtdQuadradosLargura)]
                       for indiceColuna in range(qtdQuadradosAltura)]
 
+    # Método responsável por adicionar peças ao jogo conforme forem caindo as anteriores
     def addPecas(self, peca):
         for lin in range(peca.tamanho):
             for col in range(peca.tamanho):
                 if peca.grade[lin][col] != 0:
                     self.grade[lin+peca.coluna][col +
                                                 peca.linha] = peca.grade[lin][col]
+
+# A classe Tetris é a classe inicializadora do jogo, nesta classe define-se o canvas para renderizar
+# a grade da tela e define o método run().
 
 
 class Tetris:
@@ -122,19 +129,21 @@ class Tetris:
                          lin*quadradoLado+quadradoLado], fill="red")
 
     def run(self):
-        time = 0
+        tempoDescida = 0
         while(True):
+            # O delete('All') está especificando que a cada vez que a peça descer pela grade, a
+            # renderização do bloco anterior, e o anterior a este, serão deletados, ficando apenas a principal.
             self.canvas.delete('all')
 
-            if time == 5:
+            if tempoDescida == 5:
                 desceu = self.peca.desce(self.tela)
-                time = 0
+                tempoDescida = 0
                 if desceu == 0:
                     self.tela.addPecas(self.peca)
                     self.peca = Peca(3, 1, 1)
 
             else:
-                time += 1
+                tempoDescida += 1
 
             self.desenha()
 
