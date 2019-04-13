@@ -105,6 +105,7 @@ class Tetris:
         self.window = Tk()
         self.canvas = Canvas(self.window, width=largura,
                              height=altura, bg='black')
+
         self.canvas.pack()
         self.peca = Peca(3, 1, 1)
         self.numPeca = 0
