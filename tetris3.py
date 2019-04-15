@@ -184,9 +184,18 @@ class Tetris:
         global indice 
         desceu = self.peca.desce(self.tela)      
         if desceu == 0:
+            if(indice == 9):
+                print("Você Venceu!")
+                quit()
+
             indice += 1
             self.tela.addPecas(self.peca)
             self.peca = listaPecas[indice]
+            for lin in range(self.peca.tamanho):
+                 for col in range(self.peca.tamanho):
+                     if self.peca.grade[lin][col] == 1 and self.tela.grade[self.peca.coluna+lin][self.peca.linha + col] != 0:
+                         print("Você perdeu!")
+                         quit()
            
 
    
