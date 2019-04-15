@@ -205,30 +205,30 @@ class Tetris:
             for indiceColuna in range(self.peca.tamanho):
                 if self.peca.grade[indiceLinha][indiceColuna] != 0:
                     self.canvas.create_polygon(
-                        [(self.peca.linha + indiceColuna) * quadradoLado,
-                         (self.peca.coluna + indiceLinha) * quadradoLado,
+                        [(self.peca.linha + indiceColuna) * quadradoLado+2,
+                         (self.peca.coluna + indiceLinha) * quadradoLado+2,
                          (self.peca.linha + indiceColuna) *
-                         quadradoLado + quadradoLado,
-                         (self.peca.coluna + indiceLinha) * quadradoLado,
+                         quadradoLado + quadradoLado-2,
+                         (self.peca.coluna + indiceLinha) * quadradoLado+2,
                          (self.peca.linha + indiceColuna) *
-                         quadradoLado + quadradoLado,
+                         quadradoLado + quadradoLado -2,
                          (self.peca.coluna + indiceLinha) *
-                         quadradoLado + quadradoLado,
-                         (self.peca.linha + indiceColuna) * quadradoLado,
-                         (self.peca.coluna + indiceLinha)*quadradoLado+quadradoLado], fill='green')
+                         quadradoLado + quadradoLado -2,
+                         (self.peca.linha + indiceColuna) * quadradoLado+2,
+                         (self.peca.coluna + indiceLinha)*quadradoLado+quadradoLado-2], fill='green')
 
         for lin in range(qtdQuadradosAltura):
             for col in range(qtdQuadradosLargura):
                 if self.tela.grade[lin][col] != 0:
                     self.canvas.create_polygon(
-                        [col*quadradoLado,
-                         lin * quadradoLado,
-                         col*quadradoLado+quadradoLado,
-                         lin*quadradoLado,
-                         col*quadradoLado+quadradoLado,
-                         lin*quadradoLado+quadradoLado,
-                         col*quadradoLado,
-                         lin*quadradoLado+quadradoLado], fill="red")
+                        [col*quadradoLado+2,
+                         lin * quadradoLado+2,
+                         col*quadradoLado+quadradoLado-2,
+                         lin*quadradoLado +2,
+                         col*quadradoLado+quadradoLado-2,
+                         lin*quadradoLado+quadradoLado-2,
+                         col*quadradoLado+2,
+                         lin*quadradoLado+quadradoLado-2], fill="red")
 
     def run(self):
        
