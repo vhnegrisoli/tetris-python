@@ -2,9 +2,9 @@ from tkinter import *
 import random
 
 # Dimensões do jogo
-quadradoLado = 20
-qtdQuadradosLargura = 10
-qtdQuadradosAltura = 20
+quadradoLado = 30
+qtdQuadradosLargura = 8
+qtdQuadradosAltura = 10
 # Define a altura e a largura da tela
 largura = quadradoLado * qtdQuadradosLargura
 altura = quadradoLado * qtdQuadradosAltura
@@ -88,8 +88,11 @@ class Peca:
             for indiceColuna in range(self.tamanho):
                 if self.grade[indiceLinha][indiceColuna] * (self.coluna+1+indiceLinha) >= qtdQuadradosAltura:
                     return 0
-                if self.grade[indiceLinha][indiceColuna] == 1 and Tela.grade[self.coluna+indiceLinha+1][self.linha+indiceColuna] * self.grade[indiceLinha][indiceColuna] != 0:
-                    return 0
+                try:
+                    if self.grade[indiceLinha][indiceColuna] == 1 and Tela.grade[self.coluna+indiceLinha+1][self.linha+indiceColuna] * self.grade[indiceLinha][indiceColuna] != 0:
+                        return 0
+                except:
+                    print('fim de jogo')
         self.coluna = self.coluna + 1
         return 1
 
@@ -147,6 +150,7 @@ class Tetris:
 
         self.window.bind("<Right>", self.moverParaDireita)
         self.window.bind("<Left>", self.moverParaEsquerda)
+        self.window.bind("<Down>", self.moverParaBaixo)
         self.window.bind("<Up>", self.gira)
 
     def gira(self, event):
@@ -154,9 +158,19 @@ class Tetris:
 
     def moverParaEsquerda(self, event):
         self.peca.esquerda(self.tela)
+        
 
     def moverParaDireita(self, event):
         self.peca.direita(self.tela)
+        
+
+    def moverParaBaixo(self, event):
+        desceu = self.peca.desce(self.tela)      
+        if desceu == 0:
+            self.tela.addPecas(self.peca)
+            self.peca = Peca(3, 1, geraPecaAleatoria())
+
+   
 
     def desenha(self):
         for indiceLinha in range(self.peca.tamanho):
@@ -189,21 +203,14 @@ class Tetris:
                          lin*quadradoLado+quadradoLado], fill="red")
 
     def run(self):
-        tempoDescida = 0
+       
         while(True):
             # O delete('All') está especificando que a cada vez que a peça descer pela grade, a
             # renderização do bloco anterior, e o anterior a este, serão deletados, ficando apenas a principal.
             self.canvas.delete('all')
-
-            if tempoDescida == 5:
-                desceu = self.peca.desce(self.tela)
-                tempoDescida = 0
-                if desceu == 0:
-                    self.tela.addPecas(self.peca)
-                    self.peca = Peca(3, 1, geraPecaAleatoria())
-
-            else:
-                tempoDescida += 1
+          
+           
+               
 
             self.desenha()
 
