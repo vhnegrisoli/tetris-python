@@ -8,6 +8,8 @@ qtdQuadradosAltura = 10
 # Define a altura e a largura da tela
 largura = quadradoLado * qtdQuadradosLargura
 altura = quadradoLado * qtdQuadradosAltura
+indice = 0
+listaPecas = []
 
 # Este método global é responsável por gerar números aleatórios de 1 a 7.
 # Os números de 1 a 7 são respectivos às diferentes 7 tipos de peças geradas
@@ -143,8 +145,22 @@ class Tetris:
         self.canvas = Canvas(self.window, width=largura,
                              height=altura, bg='black')
 
+        global listaPecas
+
+        listaPecas = [
+            Peca(3, 1, 4),
+            Peca(3, 1, 1),
+            Peca(3, 1, 3),
+            Peca(3, 1, 4),
+            Peca(3, 1, 7),
+            Peca(3, 1, 3),
+            Peca(3, 1, 2),
+            Peca(3, 1, 5),
+            Peca(3, 1, 7),
+            Peca(3, 1, 6),
+        ]
         self.canvas.pack()
-        self.peca = Peca(3, 1, geraPecaAleatoria())
+        self.peca = listaPecas[indice]
         self.numPeca = 0
         self.tela = Tela()
 
@@ -165,10 +181,13 @@ class Tetris:
         
 
     def moverParaBaixo(self, event):
+        global indice 
         desceu = self.peca.desce(self.tela)      
         if desceu == 0:
+            indice += 1
             self.tela.addPecas(self.peca)
-            self.peca = Peca(3, 1, geraPecaAleatoria())
+            self.peca = listaPecas[indice]
+           
 
    
 
