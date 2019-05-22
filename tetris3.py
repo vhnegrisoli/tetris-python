@@ -1,4 +1,5 @@
 from tkinter import *
+from enum import Enum
 import random
 
 # Dimensões do jogo
@@ -14,10 +15,19 @@ listaPecas = []
 # Este método global é responsável por gerar números aleatórios de 1 a 7.
 # Os números de 1 a 7 são respectivos às diferentes 7 tipos de peças geradas
 # pelo jogo.
+
+
+class Posicao(Enum):
+    VAZIO = 0
+    PREENCHIDO = 1
+
+
 def geraPecaAleatoria():
     return random.randint(1, 7)
 
 # A classe Peca é responsável por criar e renderizar a peça no Tetris
+
+
 class Peca:
 
     def __init__(self, linha, coluna, tipo):
@@ -27,41 +37,64 @@ class Peca:
         # O tipo define como será a peça, sendo:
         # Esta é a cobra em formato de cobra
         if(tipo == 1):
-            self.grade = [[0, 0, 0], [1, 1, 0], [0, 1, 1]]
+            self.grade = [[Posicao.VAZIO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.PREENCHIDO.value,
+                              Posicao.PREENCHIDO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value]]
             self.tamanho = 3
 
-        # Esta é a peça em formato de cobra inversa    
+        # Esta é a peça em formato de cobra inversa
         elif(tipo == 2):
-            self.grade = [[0, 0, 0], [0, 1, 1], [1, 1,0]]
+            self.grade = [[Posicao.VAZIO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value,
+                              Posicao.PREENCHIDO.value],
+                          [Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value, Posicao.VAZIO.value]]
             self.tamanho = 3
 
         # Esta é a peça em formato de quadrado
         elif(tipo == 3):
-            self.grade = [[0, 0, 0], [0, 1, 1], [0, 1,1]]
+            self.grade = [[Posicao.VAZIO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value,
+                              Posicao.PREENCHIDO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value]]
             self.tamanho = 3
-        
+
         # Esta é a peça em formato de L
         elif(tipo == 4):
-            self.grade = [[0, 0, 0], [0, 0, 1], [1, 1,1]]
-            self.tamanho = 3
-        
-        # Esta é a peça em formato de L invertido    
-        elif(tipo == 5):
-            self.grade = [[0, 0, 0], [1, 0, 0], [1, 1,1]]
+            self.grade = [[Posicao.VAZIO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.VAZIO.value,
+                              Posicao.PREENCHIDO.value],
+                          [Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value]]
             self.tamanho = 3
 
-        # Esta é a peça em formato de T    
-        elif(tipo == 6):
-            self.grade = [[0, 0, 0], [0,1, 0], [1, 1,1]]
+        # Esta é a peça em formato de L invertido
+        elif(tipo == 5):
+            self.grade = [[Posicao.VAZIO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.PREENCHIDO.value,
+                              Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value]]
             self.tamanho = 3
-        
-        #Esta é a peça em formato de barra, em uma matriz 4x4    
+
+        # Esta é a peça em formato de T
+        elif(tipo == 6):
+            self.grade = [[Posicao.VAZIO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value,
+                              Posicao.VAZIO.value],
+                          [Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value, Posicao.PREENCHIDO.value]]
+            self.tamanho = 3
+
+        # Esta é a peça em formato de barra, em uma matriz 4x4
         elif(tipo == 7):
-            self.grade = [[0,1,0,0], [0, 1,0, 0], [0,1, 0,0], [0,1,0,0]]
+            self.grade = [[Posicao.VAZIO.value, Posicao.PREENCHIDO.value, Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value,
+                              Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value,
+                              Posicao.VAZIO.value, Posicao.VAZIO.value],
+                          [Posicao.VAZIO.value, Posicao.PREENCHIDO.value, Posicao.VAZIO.value, Posicao.VAZIO.value]]
             self.tamanho = 4
-                
 
     # Método responsável por girar uma peça no jogo
+
     def vira(self, Tela):
         # Cria um array de cópia para armazenar a peça a ser giradea
         copia = [[0 for indiceLinha in range(
@@ -121,6 +154,8 @@ class Peca:
         return 1
 
 # A classe tela é responsável por criar a grade da tela, que será renederizada pelo canvas na classe Tetris
+
+
 class Tela:
 
     def __init__(self):
@@ -138,6 +173,8 @@ class Tela:
 
 # A classe Tetris é a classe inicializadora do jogo, nesta classe define-se o canvas para renderizar
 # a grade da tela e define o método run().
+
+
 class Tetris:
 
     def __init__(self):
@@ -174,15 +211,13 @@ class Tetris:
 
     def moverParaEsquerda(self, event):
         self.peca.esquerda(self.tela)
-        
 
     def moverParaDireita(self, event):
         self.peca.direita(self.tela)
-        
 
     def moverParaBaixo(self, event):
-        global indice 
-        desceu = self.peca.desce(self.tela)      
+        global indice
+        desceu = self.peca.desce(self.tela)
         if desceu == 0:
             if(indice == 9):
                 print("Você Venceu!")
@@ -192,13 +227,10 @@ class Tetris:
             self.tela.addPecas(self.peca)
             self.peca = listaPecas[indice]
             for lin in range(self.peca.tamanho):
-                 for col in range(self.peca.tamanho):
-                     if self.peca.grade[lin][col] == 1 and self.tela.grade[self.peca.coluna+lin][self.peca.linha + col] != 0:
-                         print("Você perdeu!")
-                         quit()
-           
-
-   
+                for col in range(self.peca.tamanho):
+                    if self.peca.grade[lin][col] == 1 and self.tela.grade[self.peca.coluna+lin][self.peca.linha + col] != 0:
+                        print("Você perdeu!")
+                        quit()
 
     def desenha(self):
         for indiceLinha in range(self.peca.tamanho):
@@ -211,9 +243,9 @@ class Tetris:
                          quadradoLado + quadradoLado-2,
                          (self.peca.coluna + indiceLinha) * quadradoLado+2,
                          (self.peca.linha + indiceColuna) *
-                         quadradoLado + quadradoLado -2,
+                         quadradoLado + quadradoLado - 2,
                          (self.peca.coluna + indiceLinha) *
-                         quadradoLado + quadradoLado -2,
+                         quadradoLado + quadradoLado - 2,
                          (self.peca.linha + indiceColuna) * quadradoLado+2,
                          (self.peca.coluna + indiceLinha)*quadradoLado+quadradoLado-2], fill='green')
 
@@ -224,21 +256,18 @@ class Tetris:
                         [col*quadradoLado+2,
                          lin * quadradoLado+2,
                          col*quadradoLado+quadradoLado-2,
-                         lin*quadradoLado +2,
+                         lin*quadradoLado + 2,
                          col*quadradoLado+quadradoLado-2,
                          lin*quadradoLado+quadradoLado-2,
                          col*quadradoLado+2,
                          lin*quadradoLado+quadradoLado-2], fill="red")
 
     def run(self):
-       
+
         while(True):
             # O delete('All') está especificando que a cada vez que a peça descer pela grade, a
             # renderização do bloco anterior, e o anterior a este, serão deletados, ficando apenas a principal.
             self.canvas.delete('all')
-          
-           
-               
 
             self.desenha()
 
